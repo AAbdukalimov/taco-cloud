@@ -16,7 +16,7 @@ import java.util.Objects;
 //@RequiredArgsConstructor
 @Entity
 @AllArgsConstructor
-@NoArgsConstructor(access=AccessLevel.PRIVATE, force=true)
+@NoArgsConstructor
 public class Ingredient {
 
     @Id
@@ -24,8 +24,6 @@ public class Ingredient {
     private String name;
     private Type type;
 
-    public Ingredient() {
-    }
 
     @Override
     public boolean equals(Object o) {

@@ -2,6 +2,11 @@ package sia.tacocloud.controllers;
 
 
 //import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,10 +23,17 @@ import javax.validation.Valid;
 @Controller
 @RequestMapping("/orders")
 @SessionAttributes("tacoOrder")
+@Builder
+//@AllArgsConstructor
+//@NoArgsConstructor
+@RequiredArgsConstructor
 public class OrderController {
 
-    private final OrderRepository orderRepository;
 
+//    @Autowired
+    private OrderRepository orderRepository;
+
+    @Autowired
     public OrderController(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
     }

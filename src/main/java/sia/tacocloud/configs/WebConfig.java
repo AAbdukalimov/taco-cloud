@@ -13,14 +13,14 @@ import java.util.Locale;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-    @Bean
-    public LocaleResolver localResolver() {
-        CookieLocaleResolver resolver = new CookieLocaleResolver();
-        resolver.setDefaultLocale(Locale.FRANCE);
-        resolver.setCookieName("locale");
-        resolver.setCookieMaxAge(3600);
-        return resolver;
-    }
+//    @Bean
+//    public LocaleResolver localResolver() {
+//        CookieLocaleResolver resolver = new CookieLocaleResolver();
+//        resolver.setDefaultLocale(Locale.FRANCE);
+//        resolver.setCookieName("locale");
+//        resolver.setCookieMaxAge(3600);
+//        return resolver;
+//    }
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
