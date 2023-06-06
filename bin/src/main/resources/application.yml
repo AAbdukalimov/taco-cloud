@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: user
+    driver-class-name: org.postgresql.Driver
+  security:
+    oauth2:
+      client:
+        registration:
+          facebook:
+            client-id: 206743098891362
+            client-secret: d29809d025250bba1e21da849b26234a
+            scope:
+              - email
+              - public_profile
+
+
+
