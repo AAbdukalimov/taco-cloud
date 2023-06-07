@@ -10,6 +10,9 @@
 <div th:if="${error}">
     Unable to login. Check your username and password.
 </div>
+<p>
+    <a th:href="@{/oauth2/authorization/facebook}">Sign in with Facebook</a>
+</p>
 <p>New here? Click
     <a th:href="@{/register}">here</a> to register.</p>
 <form method="POST" th:action="@{/login}" id="loginForm">
@@ -20,5 +23,6 @@
     <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
     <input type="submit" value="Login"/>
 </form>
+
 </body>
 </html>

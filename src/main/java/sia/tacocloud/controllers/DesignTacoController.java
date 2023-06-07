@@ -1,7 +1,9 @@
 package sia.tacocloud.controllers;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,12 +27,16 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
+@Builder
 @RequestMapping("/design")
 @SessionAttributes("tacoOrder")
 @NoArgsConstructor
+//@AllArgsConstructor
+//@RequiredArgsConstructor
 public class DesignTacoController {
 
-    private  IngredientRepository ingredientRepository;
+
+    private IngredientRepository ingredientRepository;
 
     @Autowired
     public DesignTacoController(IngredientRepository ingredientRepository) {
@@ -76,13 +82,13 @@ public class DesignTacoController {
 
     @GetMapping
     public String showDesignForm() {
-        return "design.html";
+        return "design";
     }
 
     @PostMapping
     public String processTaco(@Valid Taco taco, Errors errors, @ModelAttribute TacoOrder tacoOrder) {
         if(errors.hasErrors()) {
-            return "design.html";
+            return "design";
         }
         tacoOrder.addTaco(taco);
         log.info("Processing taco: {}", taco);

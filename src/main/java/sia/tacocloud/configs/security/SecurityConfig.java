@@ -18,13 +18,13 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-//    @Bean
-//    public UserDetailsService userDetailsService(UserRepository userRepository) {
-//        return username -> {
-//            User user = userRepository.findByUsername(username);
-//            if (user != null) return user;
-//            throw new UsernameNotFoundException("User" + username + "not found");
-//        };
-//    }
+    @Bean
+    public UserDetailsService userDetailsService(UserRepository userRepository) {
+        return username -> {
+            User user = userRepository.findByUsername(username);
+            if (user != null) return user;
+            throw new UsernameNotFoundException("User" + username + "not found");
+        };
+    }
 
 }

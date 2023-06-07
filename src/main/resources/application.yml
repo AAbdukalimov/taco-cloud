@@ -1,7 +1,54 @@
+server:
+ port: 8080
+ error:
+  path: /error
+logging:
+  file:
+    path: /var/logs/TacoCloud.log
+  level:
+    root: WARN
+    sia.tacocloud: DEBUG
+    org:
+springframework:
+    security: DEBUG
+
+
+#    org:
+#springframework:
+#        jdbc:
+#         core:
+#           jdbcTemplate: DEBUG
+
 spring:
+ security:
+   oauth2:
+     client:
+      registration:
+        facebook:
+          client-id: ${FACEBOOK_CLIENT_ID}
+          client-secret: ${FACEBOOK_CLIENT_SECRET}
+          redirect-uri: "http://localhost:8080/login/oauth2/code/facebook"
+          client-name: Facebook
+          scope:
+            - email
+            - public_profile
+
  datasource:
+  driver-class-name: org.postgresql.Driver
+  url: jdbc:postgresql://db:5432/taco-cloud
+  username: ${POSTGRES_USER}
+  password: ${POSTGRES_PASSWORD}
   generate-unique-name: false
-  name: tacocloud
+  name: taco-cloud
+ jpa:
+  show-sql: true
+  hibernate:
+   ddl-auto: none
+ mvc:
+  hiddenmethod:
+   filter:
+    enabled: true
+
 
 
 
