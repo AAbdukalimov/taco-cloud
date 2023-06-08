@@ -1,6 +1,7 @@
 package sia.tacocloud.controllers;
 
 
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,6 +25,7 @@ import javax.validation.Valid;
 @Controller
 @RequestMapping("/orders")
 @SessionAttributes("tacoOrder")
+//@ConfigurationProperties(prefix="taco.orders")
 @Builder
 @NoArgsConstructor
 public class OrderController {

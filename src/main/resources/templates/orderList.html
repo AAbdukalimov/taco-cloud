@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Order list</title>
+</head>
+<body>
+<div class="container">
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Delivery name</th>
+            <th>Delivery street</th>
+            <th>Delivery city</th>
+            <th>Delivery state</th>
+            <th>Delivery zip</th>
+            <th>Placed at</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="order : ${orders}">
+            <td th:text="${order.getId()}"></td>
+            <td th:text="${order.getDeliveryName()}"></td>
+            <td th:text="${order.getDeliveryStreet()}"></td>
+            <td th:text="${order.getDeliveryCity()}"></td>
+            <td th:text="${order.getDeliveryState()}"></td>
+            <td th:text="${order.getDeliveryZip()}"></td>
+            <td th:text="${order.getPlacedAt()}"></td>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>
