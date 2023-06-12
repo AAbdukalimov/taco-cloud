@@ -2,6 +2,7 @@ package sia.tacocloud.configs.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
@@ -10,6 +11,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.List;
 
+@Profile("taco-dev")
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
@@ -24,14 +26,16 @@ public class WebSecurityConfig {
                 .cors().configurationSource(corsConfigurationSource())
                 .and()
                 .authorizeRequests()
-                .antMatchers("/design", "/orders").access("hasRole('USER')")
-                .antMatchers("/", "/**").access("permitAll()")
+                .antMatchers("/design", "/orders").hasRole("USER")
+                .antMatchers("/", "/**").permitAll()
+                .anyRequest().authenticated()
                 .and()
                 .formLogin()
-                .loginPage("/login")
+                .loginPage("/authentication")
+                .defaultSuccessUrl("/design").permitAll()
                 .and()
                 .oauth2Login()
-                .loginPage("/login")
+                .loginPage("/authentication")
                 .authorizationEndpoint()
                 .baseUri("/oauth2/authorization")
                 .and()

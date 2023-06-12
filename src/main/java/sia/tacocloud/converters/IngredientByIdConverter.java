@@ -6,12 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 import sia.tacocloud.entities.Ingredient;
-import sia.tacocloud.entities.enums.Type;
 import sia.tacocloud.repositories.IngredientRepository;
 
-import java.security.PublicKey;
-import java.util.HashMap;
-import java.util.Map;
 
 @Component
 @NoArgsConstructor

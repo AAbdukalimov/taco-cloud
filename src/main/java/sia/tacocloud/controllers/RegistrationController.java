@@ -1,24 +1,25 @@
 package sia.tacocloud.controllers;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import sia.tacocloud.entities.RegistrationForm;
-import sia.tacocloud.repositories.UserRepository;
+import sia.tacocloud.dto.RegistrationRequest;
+import sia.tacocloud.entities.User;
+import sia.tacocloud.services.user.UserService;
+import sia.tacocloud.services.user.UserServiceImpl;
 
+@Slf4j
 @Controller
 @RequestMapping("/register")
 public class RegistrationController {
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final UserService userService;
 
-//    @Autowired
-    public RegistrationController(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
+    @Autowired
+    public RegistrationController(UserServiceImpl userService) {
+        this.userService = userService;
     }
 
     @GetMapping
@@ -27,8 +28,10 @@ public class RegistrationController {
     }
 
     @PostMapping
-    public String processRegistration(RegistrationForm form) {
-        userRepository.save(form.toUser(passwordEncoder));
-        return "redirect:/login";
+    public String processRegistration(RegistrationRequest registrationRequest) {
+        User user = userService.toUser(registrationRequest);
+        userService.save(user);
+        return "redirect:/authentication";
     }
+
 }

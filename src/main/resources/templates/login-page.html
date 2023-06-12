@@ -1,21 +1,23 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <title>Taco Cloud</title>
 </head>
 <body>
 <h1>Login</h1>
-<img th:src="@{/images/TacoCloud.png}"/>
-<div th:if="${error}">
-    Unable to login. Check your username and password.
-</div>
+<img th:src="@{/images/TacoCloud.png}" alt="taco picture"/>
+<!--<div th:if="${error}">-->
+<!--    Unable to login. Check your username and password.-->
+<!--</div>-->
 <p>
     <a th:href="@{/oauth2/authorization/facebook}">Sign in with Facebook</a>
 </p>
 <p>New here? Click
     <a th:href="@{/register}">here</a> to register.</p>
-<form method="POST" th:action="@{/login}" id="loginForm">
+<div sec:authorize="isAnonymous()">
+<form th:method="POST" th:action="@{/authentication/submit}">
     <label for="username">Username: </label>
     <input type="text" name="username" id="username" /><br/>
     <label for="password">Password: </label>
@@ -23,6 +25,7 @@
     <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
     <input type="submit" value="Login"/>
 </form>
+</div>
 
 </body>
 </html>

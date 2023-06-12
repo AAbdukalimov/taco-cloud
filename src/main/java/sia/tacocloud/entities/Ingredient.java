@@ -2,36 +2,24 @@ package sia.tacocloud.entities;
 
 import lombok.*;
 import org.hibernate.Hibernate;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Persistable;
-import sia.tacocloud.entities.enums.Type;
-
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Objects;
 
 
 @Getter
 @Setter
 @ToString
-//@RequiredArgsConstructor
+@Table(name = "ingredient")
 @Entity
-//@AllArgsConstructor
+@AllArgsConstructor
 @NoArgsConstructor
 public class Ingredient {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
     private String name;
-    private Type type;
-
-
-
-    public Ingredient(String id, String name, Type type) {
-        this.id = id;
-        this.name = name;
-        this.type = type;
-    }
+    private String type;
 
     @Override
     public boolean equals(Object o) {

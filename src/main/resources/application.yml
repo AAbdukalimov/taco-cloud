@@ -2,22 +2,16 @@ server:
  port: 8080
  error:
   path: /error
+
 logging:
-  file:
-    path: /var/logs/TacoCloud.log
   level:
-    root: WARN
-    sia.tacocloud: DEBUG
-    org:
-springframework:
-    security: DEBUG
+   sia.tacocloud: DEBUG
 
-
-#    org:
-#springframework:
-#        jdbc:
-#         core:
-#           jdbcTemplate: DEBUG
+   org:
+     springframework:
+       jdbc:
+         core:
+           jdbcTemplate: DEBUG
 
 spring:
  security:
@@ -38,7 +32,6 @@ spring:
   url: jdbc:postgresql://db:5432/taco-cloud
   username: ${POSTGRES_USER}
   password: ${POSTGRES_PASSWORD}
-  generate-unique-name: false
   name: taco-cloud
  jpa:
   show-sql: true

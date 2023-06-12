@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en"
-        xmlns="http://www.w3.org/1999/xhtml"
-        xmlns:th="http://www.thymeleaf.org"
-        xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <title>Taco Cloud</title>
     <style>
@@ -13,7 +13,7 @@
             font-weight: bold;
         }
     </style>
-    <link rel="stylesheet" th:href="@{/styles.css}" />
+    <link rel="stylesheet" th:href="@{/styles.css}"/>
 </head>
 <body>
 <div sec:authorize="isAuthenticated()">
@@ -25,8 +25,8 @@
     </form>
 </div>
 <h1>Design your taco!</h1>
-<img th:src="@{/images/TacoCloud.png}"/>
-<form method="POST" th:object="${taco}">
+<img th:src="@{/images/TacoCloud.png}" alt="taco-cloud picture" src=""/>
+<form th:method="POST" th:action="@{/design/create}" th:object="${taco}">
     <div class="grid">
         <div class="ingredient-group" id="wraps">
             <h3>Designate your wrap:</h3>
@@ -40,8 +40,8 @@
             <h3>Pick your protein:</h3>
             <div th:each="ingredient : ${protein}">
                 <input th:field="*{ingredients}" type="checkbox"
-                       th:value="${ingredient.id}"/>
-                <span th:text="${ingredient.name}">INGREDIENT</span><br/>
+                       th:value="${ingredient.getId()}"/>
+                <span th:text="${ingredient.getName()}">INGREDIENT</span><br/>
             </div>
         </div>
         <div class="ingredient-group" id="cheeses">
@@ -68,6 +68,8 @@
                 <span th:text="${ingredient.name}">INGREDIENT</span><br/>
             </div>
         </div>
+
+
     </div>
     <div>
         <h3>Name your taco creation:</h3>

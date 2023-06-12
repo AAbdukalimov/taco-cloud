@@ -1,23 +1,10 @@
 package sia.tacocloud.entities;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.Hibernate;
-
-import org.springframework.web.bind.annotation.GetMapping;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -25,13 +12,14 @@ import java.util.Objects;
 @Getter
 @Setter
 @ToString
-@RequiredArgsConstructor
 @Entity
 @Table(name = "taco")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Taco {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private Date createdAt = new Date();
@@ -41,10 +29,15 @@ public class Taco {
     private String name;
 
     @NotNull
-    @Size(min=1, message="You must choose at least 1 ingredient")
-    @ManyToMany()
+    @Size(min = 1, message="You must choose at least 1 ingredient")
+    @OneToMany
     @ToString.Exclude
-    private List<Ingredient> ingredients = new ArrayList<>();
+    private List<Ingredient> ingredients;
+
+    @ManyToOne (fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
+    @JoinColumn (name = "taco_order_id")
+    @ToString.Exclude
+    private TacoOrder tacoOrder;
 
     public void addIngredient(Ingredient ingredient) {
         this.ingredients.add(ingredient);

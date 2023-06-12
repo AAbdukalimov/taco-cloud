@@ -1,28 +1,17 @@
 package sia.tacocloud.entities;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.Hibernate;
 import org.hibernate.validator.constraints.CreditCardNumber;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
-import java.io.Serial;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -30,18 +19,15 @@ import java.util.Objects;
 @Getter
 @Setter
 @ToString
-//@RequiredArgsConstructor
 @Table(name = "taco_order")
 @Entity
-//@AllArgsConstructor
-//@NoArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 public class TacoOrder implements Serializable {
 
-    @Serial
-    private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotBlank(message="Delivery name is required")
@@ -59,7 +45,7 @@ public class TacoOrder implements Serializable {
     @NotBlank(message="Zip code is required")
     private String deliveryZip;
 
-    @CreditCardNumber(message="Not a valid credit card number")
+//    @CreditCardNumber(message="Not a valid credit card number")
     private String ccNumber;
 
     @Pattern(regexp="^(0[1-9]|1[0-2])(/)([2-9]\\d)$", message="Must be formatted MM/YY")
@@ -73,9 +59,9 @@ public class TacoOrder implements Serializable {
     @ManyToOne
     private User user;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tacoOrder", fetch = FetchType.EAGER, orphanRemoval = true)
     @ToString.Exclude
-    private List<Taco> tacos = new ArrayList<>();
+    private List<Taco> tacos;
 
     public void addTaco(Taco taco) {
         this.tacos.add(taco);
@@ -93,4 +79,5 @@ public class TacoOrder implements Serializable {
     public int hashCode() {
         return getClass().hashCode();
     }
+
 }

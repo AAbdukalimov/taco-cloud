@@ -1,41 +1,61 @@
 package sia.tacocloud.controllers;
 
-
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
-import org.springframework.web.bind.support.SessionStatus;
+import sia.tacocloud.configs.OrderProperties;
+import sia.tacocloud.configs.security.UserDetailsServiceImpl;
+import sia.tacocloud.entities.Taco;
 import sia.tacocloud.entities.TacoOrder;
 import sia.tacocloud.entities.User;
-import sia.tacocloud.repositories.OrderRepository;
+import sia.tacocloud.services.taco.TacoService;
+import sia.tacocloud.services.tacoorder.TacoOrderService;
+
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.List;
 
-
+@Data
+@Slf4j
 @Controller
 @RequestMapping("/orders")
 @SessionAttributes("tacoOrder")
-//@ConfigurationProperties(prefix="taco.orders")
-@Builder
-@NoArgsConstructor
 public class OrderController {
 
-
-    private OrderRepository orderRepository;
+    private TacoOrderService tacoOrderService;
+    private OrderProperties orderProperties;
+    private UserDetailsServiceImpl userDetailsService;
+    private HttpSession session;
+    private List<Taco> tacos;
+    private TacoService tacoService;
 
     @Autowired
-    public OrderController(OrderRepository orderRepository) {
-        this.orderRepository = orderRepository;
+    public OrderController
+            (
+                    TacoOrderService tacoOrderService,
+                    OrderProperties orderProperties,
+                    UserDetailsServiceImpl userDetailsService,
+                    HttpSession session,
+                    List<Taco> tacos,
+                    TacoService tacoService
+            ) {
+        this.tacoOrderService = tacoOrderService;
+        this.orderProperties = orderProperties;
+        this.userDetailsService = userDetailsService;
+        this.session = session;
+        this.tacos = tacos;
+        this.tacoService = tacoService;
     }
 
     @GetMapping("/current")
@@ -43,24 +63,34 @@ public class OrderController {
         return "orderForm";
     }
 
-    @PostMapping
-    public String processOrder(@Valid TacoOrder order, Errors errors, SessionStatus sessionStatus, @AuthenticationPrincipal User user) {
+    @PostMapping("/create")
+    @Transactional
+    public String processOrder(@Valid TacoOrder tacoOrder, Errors errors) {
         if (errors.hasErrors()) {
             return "orderForm";
         }
+        User user = (User) session.getAttribute("user");
 
-        order.setUser(user);
-        orderRepository.save(order);
-        sessionStatus.setComplete();
+        Taco tacoSession = (Taco) session.getAttribute("tacoSession");
+
+        tacos.add(tacoSession);
+
+        tacoOrder.setTacos(tacos);
+        tacoOrder.setUser(user);
+        TacoOrder order = tacoOrderService.save(tacoOrder);
+
+        tacoSession.setTacoOrder(order);
+        Taco taco = tacoService.save(tacoSession);
+
         return "redirect:/";
     }
 
     @GetMapping
     public String ordersForUser(@AuthenticationPrincipal User user, Model model) {
-        model.addAttribute("orders", orderRepository.findByUserOrderByPlacedAtDesc(user));
+        Pageable pageable = PageRequest.of(0, orderProperties.getPageSize());
+        model.addAttribute("orders", tacoOrderService.findByUserOrderByPlacedAtDesc(user, pageable));
         return "orderList";
     }
-
 
 }
 

@@ -1,9 +1,7 @@
 package sia.tacocloud.controllers;
 
-import lombok.AllArgsConstructor;
+
 import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,12 +14,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import sia.tacocloud.entities.Ingredient;
 import sia.tacocloud.entities.Taco;
-import sia.tacocloud.entities.enums.Type;
 import sia.tacocloud.entities.TacoOrder;
+import sia.tacocloud.entities.enums.Type;
 import sia.tacocloud.repositories.IngredientRepository;
+import sia.tacocloud.services.taco.TacoService;
+import sia.tacocloud.services.tacoorder.TacoOrderService;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,42 +30,36 @@ import java.util.stream.Collectors;
 @Builder
 @RequestMapping("/design")
 @SessionAttributes("tacoOrder")
-@NoArgsConstructor
-//@AllArgsConstructor
-//@RequiredArgsConstructor
 public class DesignTacoController {
 
-
     private IngredientRepository ingredientRepository;
+    private TacoService tacoService;
+    private TacoOrderService tacoOrderService;
+    private HttpSession session;
+
 
     @Autowired
-    public DesignTacoController(IngredientRepository ingredientRepository) {
+    public DesignTacoController
+            (
+                    IngredientRepository ingredientRepository,
+                    TacoService tacoService,
+                    TacoOrderService tacoOrderService,
+                    HttpSession session
+            ) {
         this.ingredientRepository = ingredientRepository;
+        this.tacoService = tacoService;
+        this.tacoOrderService = tacoOrderService;
+        this.session = session;
     }
 
     @ModelAttribute
     public void addIngredientsToModel(Model model) {
-        // First version
-//        List<Ingredient>ingredients = Arrays.asList(
-//                new Ingredient("FLTO", "FLOUR TORTILLA", Type.WRAP),
-//                new Ingredient("COTO", "Corn Tortilla", Type.WRAP),
-//                new Ingredient("GRBF", "Ground Beef", Type.PROTEIN),
-//                new Ingredient("CARN", "Carnitas", Type.PROTEIN),
-//                new Ingredient("TMTO", "Diced Tomatoes", Type.VEGGIES),
-//                new Ingredient("LETC", "Lettuce", Type.VEGGIES),
-//                new Ingredient("CHED", "Cheddar", Type.CHEESE),
-//                new Ingredient("JACK", "Monterrey Jack", Type.CHEESE),
-//                new Ingredient("SLSA", "Salsa", Type.SAUCE),
-//                new Ingredient("SRCR", "Sour Cream", Type.SAUCE)
-//        );
-
-        //Second version
-
-        List<Ingredient>ingredients = (List<Ingredient>) ingredientRepository.findAll();
+        List<Ingredient> ingredients = (List<Ingredient>) ingredientRepository.findAll();
 
         Type[] types = Type.values();
+
         for (Type type : types) {
-            model.addAttribute(type.toString().toLowerCase(), filterByType(ingredients, type));
+            model.addAttribute(type.getTypeName().toLowerCase(), filterByType(ingredients, type.getTypeName()));
         }
 
     }
@@ -80,22 +74,24 @@ public class DesignTacoController {
         return new Taco();
     }
 
-    @GetMapping
+
+    @GetMapping("/page")
     public String showDesignForm() {
         return "design";
     }
 
-    @PostMapping
-    public String processTaco(@Valid Taco taco, Errors errors, @ModelAttribute TacoOrder tacoOrder) {
-        if(errors.hasErrors()) {
+    @PostMapping("/create")
+    public String processTaco(@Valid Taco tacoSession, Errors errors, @ModelAttribute TacoOrder tacoOrder) {
+        if (errors.hasErrors()) {
             return "design";
         }
-        tacoOrder.addTaco(taco);
-        log.info("Processing taco: {}", taco);
+
+        session.setAttribute("tacoSession", tacoSession);
+
         return "redirect:/orders/current";
     }
 
-    private Iterable<Ingredient> filterByType(List<Ingredient> ingredients, Type type) {
+    private Iterable<Ingredient> filterByType(List<Ingredient> ingredients, String type) {
         return ingredients
                 .stream()
                 .filter(ingredient -> ingredient.getType().equals(type))
