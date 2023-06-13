@@ -1,4 +1,4 @@
-package sia.tacocloud.controllers;
+package sia.tacocloud.mvc;
 
 import lombok.Builder;
 import org.springframework.stereotype.Controller;

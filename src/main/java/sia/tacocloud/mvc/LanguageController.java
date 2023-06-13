@@ -1,4 +1,4 @@
-package sia.tacocloud.controllers;
+package sia.tacocloud.mvc;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;

@@ -14,7 +14,24 @@ logging:
            jdbcTemplate: DEBUG
 
 spring:
- security:
+  data:
+    rest:
+      base-path: /data-api
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://db:5432/taco-cloud
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+    name: taco-cloud
+  security:
    oauth2:
      client:
       registration:
@@ -27,20 +44,9 @@ spring:
             - email
             - public_profile
 
- datasource:
-  driver-class-name: org.postgresql.Driver
-  url: jdbc:postgresql://db:5432/taco-cloud
-  username: ${POSTGRES_USER}
-  password: ${POSTGRES_PASSWORD}
-  name: taco-cloud
- jpa:
-  show-sql: true
-  hibernate:
-   ddl-auto: none
- mvc:
-  hiddenmethod:
-   filter:
-    enabled: true
+
+
+
 
 
 

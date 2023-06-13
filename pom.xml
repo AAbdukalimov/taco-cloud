@@ -16,6 +16,7 @@
     <properties>
         <java.version>17</java.version>
         <postgresql.version>42.6.0</postgresql.version>
+        <spring.openapi.version>1.6.7</spring.openapi.version>
     </properties>
 
     <dependencies>
@@ -91,6 +92,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>${spring.openapi.version}</version>
         </dependency>
 
     </dependencies>

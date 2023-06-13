@@ -1,5 +1,6 @@
 package sia.tacocloud.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.Hibernate;
 import javax.persistence.*;
@@ -34,6 +35,7 @@ public class Taco {
     @ToString.Exclude
     private List<Ingredient> ingredients;
 
+    @JsonIgnore
     @ManyToOne (fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
     @JoinColumn (name = "taco_order_id")
     @ToString.Exclude
