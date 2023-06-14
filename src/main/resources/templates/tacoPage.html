@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <title>Tacos</title>
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+</head>
+<body>
+
+<h1>Tacos</h1>
+
+<table>
+  <tr>
+    <th>Имя</th>
+    <th>Дата создания</th>
+    <th>ID</th>
+    <th>Изображение</th>
+  </tr>
+  <tr th:each="taco : ${allTacos}">
+    <td th:text="${taco.getName()}"></td>
+    <td th:text="${taco.getCreatedAt()}"></td>
+    <td th:text="${taco.getTacoOrder().getId()}"></td>
+    <td><img src="/images/TacoCloud.png" alt="Изображение"/></td>
+  </tr>
+</table>
+
+<div class="pagination-buttons">
+<div th:if="${tacoPage.hasPrevious}">
+  <a th:href="@{/tacos(page=${tacoPage.previousPageable().pageNumber})}">Previous</a>
+</div>
+
+<div th:if="${tacoPage.hasNext}">
+  <a th:href="@{/tacos(page=${tacoPage.nextPageable().pageNumber})}">Next</a>
+</div>
+</div>
+
+</body>
+</html>

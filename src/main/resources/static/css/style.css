@@ -1,0 +1,50 @@
+.pagination-buttons {
+    font-family: "Arial", sans-serif;
+    position: fixed;
+    bottom: 120px; /* Отступ от нижнего края */
+    left: 0;
+    right: 0;
+    text-align: center;
+}
+
+body {
+    font-family: "Arial", sans-serif;
+}
+
+h1 {
+    color: red;
+}
+
+p {
+    color: #333;
+}
+
+.button {
+    background-color: blue;
+    color: red;
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+img {
+    width: 100%;
+    height: auto;
+}
+
+.validationError {
+    color: red;
+    font-style: italic;
+    font-size: small;
+    font-weight: bold;
+}

@@ -15,6 +15,9 @@ logging:
 
 spring:
   data:
+    web:
+      pageable:
+        default-page-size: 3
     rest:
       base-path: /data-api
   mvc:

@@ -2,6 +2,8 @@ package sia.tacocloud.services.taco;
 
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import sia.tacocloud.entities.Taco;
 import sia.tacocloud.repositories.TacoRepository;
@@ -29,6 +31,11 @@ public class TacoServiceImpl implements TacoService {
     @Override
     public List<Taco> findAll() {
         return (List<Taco>) tacoRepository.findAll();
+    }
+
+    @Override
+    public Page<Taco> findAll(Pageable pageable) {
+        return tacoRepository.findAll(pageable);
     }
 
     @Override
