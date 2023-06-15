@@ -3,6 +3,7 @@ package sia.tacocloud.restful;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +28,7 @@ public class IngredientRestController {
     public IngredientRestController(IngredientService ingredientService) {
         this.ingredientService = ingredientService;
     }
+
     @GetMapping
     public ResponseEntity<Ingredient> allIngredients() {
         if(ingredientService.findAll().isEmpty()) {
@@ -36,12 +38,14 @@ public class IngredientRestController {
         }
     }
     @PostMapping
+    @PreAuthorize("#{hasRole('ADMIN')}")
     @ResponseStatus(HttpStatus.CREATED)
     public Ingredient saveIngredient(@RequestBody Ingredient ingredient) {
         return ingredientService.save(ingredient);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("#{hasRole('ADMIN')}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteIngredient(@PathVariable("id") String ingredientId) {
         ingredientService.deleteById(ingredientId);

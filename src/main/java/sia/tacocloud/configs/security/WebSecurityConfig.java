@@ -3,6 +3,7 @@ package sia.tacocloud.configs.security;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
@@ -26,6 +27,8 @@ public class WebSecurityConfig {
                 .cors().configurationSource(corsConfigurationSource())
                 .and()
                 .authorizeRequests()
+                .antMatchers(HttpMethod.POST, "/ingredients").hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE, "/ingredients/**").hasRole("ADMIN")
                 .antMatchers("/design", "/orders").hasRole("USER")
                 .antMatchers("/", "/**").permitAll()
                 .anyRequest().authenticated()
