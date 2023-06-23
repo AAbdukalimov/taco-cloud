@@ -29,13 +29,13 @@ spring:
     hibernate:
       ddl-auto: none
   datasource:
-    driver-class-name: org.postgresql.Driver
-    url: "jdbc:postgresql://localhost:5432/tacocloud"
+    url: jdbc:postgresql://localhost:5432/tacocloud
     username: postgres
     password: postgres
-    name: tacocloud
+    driver-class-name: org.postgresql.Driver
+
   flyway:
-    url: "jdbc:postgresql://localhost:5432/"
+    url: jdbc:postgresql://localhost:5432/tacocloud
     user: postgres
     password: postgres
     driver-class-name: org.postgresql.Driver
