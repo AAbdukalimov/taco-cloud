@@ -30,17 +30,26 @@ spring:
       ddl-auto: none
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://db:5432/taco-cloud
-    username: ${POSTGRES_USER}
-    password: ${POSTGRES_PASSWORD}
-    name: taco-cloud
+    url: "jdbc:postgresql://localhost:5432/tacocloud"
+    username: postgres
+    password: postgres
+    name: tacocloud
+  flyway:
+    url: "jdbc:postgresql://localhost:5432/"
+    user: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+    locations: classpath:/db.migration
+    schemas: tacocloud
+    baseline-on-migrate: true
+    baseline-version: 1
   security:
    oauth2:
      client:
       registration:
         facebook:
-          client-id: ${FACEBOOK_CLIENT_ID}
-          client-secret: ${FACEBOOK_CLIENT_SECRET}
+          client-id: 206743098891362
+          client-secret: d29809d025250bba1e21da849b26234a
           redirect-uri: "http://localhost:8080/login/oauth2/code/facebook"
           client-name: Facebook
           scope:
