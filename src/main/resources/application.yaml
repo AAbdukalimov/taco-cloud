@@ -14,6 +14,8 @@ logging:
            jdbcTemplate: DEBUG
 
 spring:
+  profiles:
+    active: taco-dev
   data:
     web:
       pageable:
@@ -28,6 +30,7 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: none
+
   datasource:
     url: jdbc:postgresql://localhost:5432/tacocloud
     username: postgres
@@ -35,14 +38,15 @@ spring:
     driver-class-name: org.postgresql.Driver
 
   flyway:
+    locations: classpath:/migration
     url: jdbc:postgresql://localhost:5432/tacocloud
-    user: postgres
-    password: postgres
+    user: ${spring.datasource.username}
+    password: ${spring.datasource.password}
     driver-class-name: org.postgresql.Driver
-    locations: classpath:/db.migration
-    schemas: tacocloud
+    schemas: public
     baseline-on-migrate: true
-    baseline-version: 1
+    baseline-version: 0
+
   security:
    oauth2:
      client:
@@ -55,6 +59,16 @@ spring:
           scope:
             - email
             - public_profile
+  rabbitmq:
+    template:
+      exchange: tacocloud.order
+      routing-key: kitchens.central
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
+
 
 
 

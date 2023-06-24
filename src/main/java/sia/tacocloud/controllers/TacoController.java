@@ -1,4 +1,4 @@
-package sia.tacocloud.mvc;
+package sia.tacocloud.controllers;
 
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
