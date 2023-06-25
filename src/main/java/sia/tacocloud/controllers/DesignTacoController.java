@@ -1,17 +1,14 @@
-package sia.tacocloud.mvc;
+package sia.tacocloud.controllers;
 
 
 import lombok.Builder;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.*;
 import sia.tacocloud.entities.Ingredient;
 import sia.tacocloud.entities.Taco;
 import sia.tacocloud.entities.TacoOrder;
@@ -22,6 +19,7 @@ import sia.tacocloud.services.tacoorder.TacoOrderService;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,28 +27,15 @@ import java.util.stream.Collectors;
 @Controller
 @Builder
 @RequestMapping("/design")
-@SessionAttributes("tacoOrder")
+@RequiredArgsConstructor
 public class DesignTacoController {
 
-    private IngredientRepository ingredientRepository;
-    private TacoService tacoService;
-    private TacoOrderService tacoOrderService;
-    private HttpSession session;
+    private final IngredientRepository ingredientRepository;
+    private final TacoService tacoService;
+    private final TacoOrderService tacoOrderService;
+    private final HttpSession session;
+    private final List<Taco> tacos;
 
-
-    @Autowired
-    public DesignTacoController
-            (
-                    IngredientRepository ingredientRepository,
-                    TacoService tacoService,
-                    TacoOrderService tacoOrderService,
-                    HttpSession session
-            ) {
-        this.ingredientRepository = ingredientRepository;
-        this.tacoService = tacoService;
-        this.tacoOrderService = tacoOrderService;
-        this.session = session;
-    }
 
     @ModelAttribute
     public void addIngredientsToModel(Model model) {
@@ -80,13 +65,21 @@ public class DesignTacoController {
         return "design";
     }
 
+
     @PostMapping("/create")
+    @Transactional
     public String processTaco(@Valid Taco tacoSession, Errors errors, @ModelAttribute TacoOrder tacoOrder) {
         if (errors.hasErrors()) {
             return "design";
         }
 
         session.setAttribute("tacoSession", tacoSession);
+
+        tacos.add(tacoSession);
+        session.setAttribute("tacos", tacos);
+
+        session.setAttribute("tacoOrder", tacoOrder);
+        tacoOrder.setTacos(tacos);
 
         return "redirect:/orders/current";
     }

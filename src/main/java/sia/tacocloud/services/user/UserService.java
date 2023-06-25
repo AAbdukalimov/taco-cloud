@@ -10,4 +10,5 @@ public interface UserService {
     User findByUsername(String username);
     User toUser(RegistrationRequest registrationRequest);
     boolean isAuthenticated(AuthenticationRequest authenticationRequest);
+    User findByUserNameAndPassword(String username, String password);
 }

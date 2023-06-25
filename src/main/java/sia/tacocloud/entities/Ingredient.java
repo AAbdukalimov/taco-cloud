@@ -3,6 +3,7 @@ package sia.tacocloud.entities;
 import lombok.*;
 import org.hibernate.Hibernate;
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Objects;
 
 
@@ -13,7 +14,7 @@ import java.util.Objects;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class Ingredient {
+public class Ingredient implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

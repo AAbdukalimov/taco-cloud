@@ -1,11 +1,13 @@
-package sia.tacocloud.restful;
+package sia.tacocloud.rest;
 
 
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import sia.tacocloud.entities.TacoOrder;
+import sia.tacocloud.services.message.sender.tacoorder.TacoOrderMessageSender;
 import sia.tacocloud.services.tacoorder.TacoOrderService;
 
 import java.util.List;
@@ -17,15 +19,19 @@ import java.util.List;
 public class TacoOrderRestController {
 
     private final TacoOrderService tacoOrderService;
+    private final TacoOrderMessageSender messageSender;
 
-    public TacoOrderRestController(TacoOrderService tacoOrderService) {
+    public TacoOrderRestController(TacoOrderService tacoOrderService, TacoOrderMessageSender messageSender) {
         this.tacoOrderService = tacoOrderService;
+        this.messageSender = messageSender;
     }
 
     @PostMapping(name = "/save", consumes = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
-    public TacoOrder postOrder(@RequestBody TacoOrder order) {
-        return tacoOrderService.save(order);
+    @Transactional
+    public TacoOrder postOrder(@RequestBody TacoOrder tacoOrder) {
+        messageSender.sendMessage(tacoOrder);
+        return tacoOrderService.save(tacoOrder);
     }
 
     @GetMapping("/findAll")
@@ -63,8 +69,7 @@ public class TacoOrderRestController {
     public void deleteOrder(@PathVariable("orderId") Long orderId) {
         try {
             tacoOrderService.deleteById(orderId);
-        }
-        catch (EmptyResultDataAccessException ignored) {
+        } catch (EmptyResultDataAccessException ignored) {
         }
     }
 
