@@ -3,10 +3,9 @@ package sia.tacocloud.controllers;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,10 +17,10 @@ import sia.tacocloud.configs.security.UserDetailsServiceImpl;
 import sia.tacocloud.entities.Taco;
 import sia.tacocloud.entities.TacoOrder;
 import sia.tacocloud.entities.User;
-import sia.tacocloud.services.rabbit.MessageSender;
+import sia.tacocloud.services.message.sender.taco.TacoMessageSender;
+import sia.tacocloud.services.message.sender.tacoorder.TacoOrderMessageSender;
 import sia.tacocloud.services.taco.TacoService;
 import sia.tacocloud.services.tacoorder.TacoOrderService;
-
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
@@ -30,7 +29,6 @@ import java.util.List;
 @Slf4j
 @Controller
 @RequestMapping("/orders")
-@SessionAttributes("tacoOrder")
 @RequiredArgsConstructor
 public class TacoOrderController {
 
@@ -38,54 +36,55 @@ public class TacoOrderController {
     private final OrderProperties orderProperties;
     private final UserDetailsServiceImpl userDetailsService;
     private final HttpSession session;
-    private final List<Taco> tacos;
     private final TacoService tacoService;
-    private final MessageSender messageSender;
+    private final TacoOrderMessageSender tacoOrdermessageSender;
+    private final TacoMessageSender tacoMessageSender;
+    private List<Taco> tacos;
 
-//    @Autowired
-//    public TacoOrderController
-//            (
-//                    TacoOrderService tacoOrderService,
-//                    OrderProperties orderProperties,
-//                    UserDetailsServiceImpl userDetailsService,
-//                    HttpSession session,
-//                    List<Taco> tacos,
-//                    TacoService tacoService
-//            ) {
-//        this.tacoOrderService = tacoOrderService;
-//        this.orderProperties = orderProperties;
-//        this.userDetailsService = userDetailsService;
-//        this.session = session;
-//        this.tacos = tacos;
-//        this.tacoService = tacoService;
-//    }
 
     @GetMapping("/current")
-    public String orderForm() {
+    public String orderForm(Model model) {
+        TacoOrder tacoOrder = (TacoOrder) session.getAttribute("tacoOrder");
+        model.addAttribute("tacoOrder", tacoOrder);
+        tacos = (List<Taco>) session.getAttribute("tacos");
+        model.addAttribute("tacos", tacos);
         return "orderForm";
     }
 
     @PostMapping("/create")
     @Transactional
-    public String processOrder(@Valid TacoOrder tacoOrder, Errors errors) {
+    public String processOrder(@ModelAttribute @Valid TacoOrder tacoOrder, Errors errors) {
         if (errors.hasErrors()) {
             return "orderForm";
         }
+
         User user = (User) session.getAttribute("user");
-
         Taco tacoSession = (Taco) session.getAttribute("tacoSession");
-
-        tacos.add(tacoSession);
+        tacos = (List<Taco>) session.getAttribute("tacos");
+        log.debug("tacos from session: " + tacos);
 
         tacoOrder.setTacos(tacos);
         tacoOrder.setUser(user);
         TacoOrder order = tacoOrderService.save(tacoOrder);
-//        messageSender.sendMessage(order);
+        log.debug("tacoOrder from db: " + order);
 
         tacoSession.setTacoOrder(order);
+
+        tacoOrdermessageSender.sendMessage(order);
+
         Taco taco = tacoService.save(tacoSession);
+        tacoMessageSender.sendMessage(taco);
+
+        log.debug("tacos from tacoOrder: " + tacoOrder.getTacos());
 
         return "redirect:/";
+    }
+
+    @RabbitListener(queues = "tacocloud.order.exchange")
+    public void receiveMessageFromTacoOrder(TacoOrder message) {
+        System.out.println("Received message from TacoOrderController: " + message);
+        // Ваша логика обработки полученного сообщения здесь
+
     }
 
     @GetMapping

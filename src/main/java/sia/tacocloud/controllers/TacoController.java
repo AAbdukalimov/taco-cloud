@@ -1,6 +1,7 @@
 package sia.tacocloud.controllers;
 
 import lombok.Builder;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -8,9 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import sia.tacocloud.entities.Taco;
 import sia.tacocloud.services.taco.TacoService;
 
@@ -20,15 +19,10 @@ import java.util.List;
 @Builder
 @Controller
 @RequestMapping("/tacos")
+@RequiredArgsConstructor
 public class TacoController {
 
     private final TacoService tacoService;
-
-
-    @Autowired
-    public TacoController(TacoService tacoService) {
-        this.tacoService = tacoService;
-    }
 
 
     @GetMapping()

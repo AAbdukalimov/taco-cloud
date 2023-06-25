@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import sia.tacocloud.entities.TacoOrder;
-import sia.tacocloud.services.rabbit.MessageSender;
+import sia.tacocloud.services.message.sender.tacoorder.TacoOrderMessageSender;
 import sia.tacocloud.services.tacoorder.TacoOrderService;
 
 import java.util.List;
@@ -19,9 +19,9 @@ import java.util.List;
 public class TacoOrderRestController {
 
     private final TacoOrderService tacoOrderService;
-    private final MessageSender messageSender;
+    private final TacoOrderMessageSender messageSender;
 
-    public TacoOrderRestController(TacoOrderService tacoOrderService, MessageSender messageSender) {
+    public TacoOrderRestController(TacoOrderService tacoOrderService, TacoOrderMessageSender messageSender) {
         this.tacoOrderService = tacoOrderService;
         this.messageSender = messageSender;
     }

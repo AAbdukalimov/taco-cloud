@@ -60,13 +60,13 @@ spring:
             - email
             - public_profile
   rabbitmq:
-    template:
-      exchange: tacocloud.order
-      routing-key: kitchens.central
     host: localhost
     port: 5672
     username: guest
     password: guest
+    template:
+      exchange: tacocloud.order
+      routing-key: kitchens.central
 
 
 

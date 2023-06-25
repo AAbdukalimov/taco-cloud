@@ -4,28 +4,22 @@ package sia.tacocloud.controllers;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.*;
 import sia.tacocloud.entities.Ingredient;
 import sia.tacocloud.entities.Taco;
 import sia.tacocloud.entities.TacoOrder;
 import sia.tacocloud.entities.enums.Type;
 import sia.tacocloud.repositories.IngredientRepository;
-import sia.tacocloud.services.rabbit.MessageSender;
 import sia.tacocloud.services.taco.TacoService;
 import sia.tacocloud.services.tacoorder.TacoOrderService;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,7 +27,6 @@ import java.util.stream.Collectors;
 @Controller
 @Builder
 @RequestMapping("/design")
-@SessionAttributes("tacoOrder")
 @RequiredArgsConstructor
 public class DesignTacoController {
 
@@ -41,23 +34,8 @@ public class DesignTacoController {
     private final TacoService tacoService;
     private final TacoOrderService tacoOrderService;
     private final HttpSession session;
-    private final RabbitTemplate rabbit;
+    private final List<Taco> tacos;
 
-
-
-//    @Autowired
-//    public DesignTacoController
-//            (
-//                    IngredientRepository ingredientRepository,
-//                    TacoService tacoService,
-//                    TacoOrderService tacoOrderService,
-//                    HttpSession session
-//            ) {
-//        this.ingredientRepository = ingredientRepository;
-//        this.tacoService = tacoService;
-//        this.tacoOrderService = tacoOrderService;
-//        this.session = session;
-//    }
 
     @ModelAttribute
     public void addIngredientsToModel(Model model) {
@@ -96,8 +74,13 @@ public class DesignTacoController {
         }
 
         session.setAttribute("tacoSession", tacoSession);
-        rabbit.convertAndSend("tacocloud.order", "kitchens.central", tacoSession);
-        log.debug("Taco in session sent to RabbitMQ: " + tacoSession);
+
+        tacos.add(tacoSession);
+        session.setAttribute("tacos", tacos);
+
+        session.setAttribute("tacoOrder", tacoOrder);
+        tacoOrder.setTacos(tacos);
+
         return "redirect:/orders/current";
     }
 
