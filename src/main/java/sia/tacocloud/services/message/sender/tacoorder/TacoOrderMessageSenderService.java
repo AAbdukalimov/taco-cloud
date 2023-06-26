@@ -22,7 +22,6 @@ public class TacoOrderMessageSenderService implements TacoOrderMessageSender {
 //        MessageProperties props = new MessageProperties();
 //        Message message = converter.toMessage(message, props);
 //        rabbit.send("tacocloud.order", message);
-        log.debug("Order sent to RabbitMQ BEFORE: " + message);
         rabbit.convertAndSend("tacocloud.order.exchange", "kitchens.central", message);
         log.debug("Order sent to RabbitMQ: " + message);
     }

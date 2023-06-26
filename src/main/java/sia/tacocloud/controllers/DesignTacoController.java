@@ -73,7 +73,10 @@ public class DesignTacoController {
             return "design";
         }
 
-        session.setAttribute("tacoSession", tacoSession);
+        String tacoName = tacoSession.getName();
+        session.setAttribute("tacoName", tacoName);
+
+        session.setAttribute(tacoName, tacoSession);
 
         tacos.add(tacoSession);
         session.setAttribute("tacos", tacos);
