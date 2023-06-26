@@ -40,8 +40,8 @@ public class TacoServiceImpl implements TacoService {
 
     @Override
     public Taco findById(Long id) {
-    return tacoRepository.findById(id)
-            .orElseThrow(() -> new NoSuchElementException("No such taco found"));
+        return tacoRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("No such taco found"));
     }
 
     @Override
@@ -49,5 +49,12 @@ public class TacoServiceImpl implements TacoService {
         tacoRepository.deleteById(id);
     }
 
+    @Override
+    public List<Taco> saveTacoList(List<Taco> tacos) {
+        for (int i = 0; i < tacos.toArray().length; i++) {
+            tacoRepository.save(tacos.get(i));
+        }
+        return tacos;
+    }
 
 }
