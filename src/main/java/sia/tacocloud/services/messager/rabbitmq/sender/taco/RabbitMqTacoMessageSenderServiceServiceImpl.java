@@ -1,4 +1,4 @@
-package sia.tacocloud.services.message.rabbitmq.sender.taco;
+package sia.tacocloud.services.messager.rabbitmq.sender.taco;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

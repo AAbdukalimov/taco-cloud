@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Order details</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
+    <script src="/scripts/order-details.js"></script>
+    <link rel="stylesheet" th:href="@{/css/order-details.css}">
+</head>
+<body>
+<div class="container draggable my-4" id="draggableContainer">
+    <table class="table">
+        <thead>
+        </thead>
+        <tbody>
+        <tr>
+            <td>ID</td>
+            <td th:text="${order.getId()}"></td>
+        </tr>
+        <tr>
+            <td>Delivery Name</td>
+            <td th:text="${order.getDeliveryName()}"></td>
+        </tr>
+        <tr>
+            <td>Delivery Address</td>
+            <td th:text="${order.getDeliveryCity()} + ',' + ${order.getDeliveryStreet()} + ', ' + ${order.getDeliveryState()}"></td>
+        </tr>
+        <tr>
+            <td>Tacos</td>
+            <td>
+                <ul>
+                    <li th:each="taco : ${order.getTacos()}" th:text="${taco.getName()} + ',' + ${taco.getCreatedAt()}"></li>
+                </ul>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
+

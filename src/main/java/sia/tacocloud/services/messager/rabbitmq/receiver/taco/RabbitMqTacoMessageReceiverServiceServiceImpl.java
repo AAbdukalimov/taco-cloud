@@ -1,4 +1,4 @@
-package sia.tacocloud.services.message.rabbitmq.receiver.taco;
+package sia.tacocloud.services.messager.rabbitmq.receiver.taco;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;

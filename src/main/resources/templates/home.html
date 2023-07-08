@@ -8,14 +8,20 @@
 </head>
 <body>
 <div sec:authorize="isAuthenticated()">
+
 <!--    <form th:action="@{/logout}" method="post">-->
 <!--        <div class="form-actions">-->
 <!--            <i class="fa fa-sign-out" aria-hidden="true" style="color: #0086c6"></i>-->
 <!--            <button type="submit" class="btn" style="color: #0086c6">Logout</button>-->
 <!--        </div>-->
 <!--    </form>-->
+
 </div>
 <h1>Welcome to...</h1>
 <img th:src="@{/images/TacoCloud.png}" alt="taco"/>
+<div th:object="${tacoOrder}">
+    <a th:href="@{/orders/{id}(id=${tacoOrder.getId()})}">View Order</a>
+    <button type="button" th:onclick="|window.location.href='/orders/' + ${tacoOrder.getId()}|">View Order</button>
+</div>
 </body>
 </html>

@@ -1,4 +1,4 @@
-package sia.tacocloud.services.message.rabbitmq.sender.tacoorder;
+package sia.tacocloud.services.messager.rabbitmq.sender.tacoorder;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;

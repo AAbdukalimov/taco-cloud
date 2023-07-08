@@ -1,7 +1,7 @@
-package sia.tacocloud.services.message.rabbitmq.receiver.taco;
+package sia.tacocloud.services.messager.rabbitmq.receiver.taco;
 
 import sia.tacocloud.entities.Taco;
-import sia.tacocloud.services.message.MessageReceiver;
+import sia.tacocloud.services.messager.MessageReceiver;
 
 public interface RabbitMqTacoMessageReceiverService extends MessageReceiver<Taco> {
 }

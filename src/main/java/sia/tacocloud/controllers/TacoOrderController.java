@@ -16,10 +16,11 @@ import sia.tacocloud.configs.security.UserDetailsServiceImpl;
 import sia.tacocloud.entities.Taco;
 import sia.tacocloud.entities.TacoOrder;
 import sia.tacocloud.entities.User;
-import sia.tacocloud.services.message.receiver.taco.TacoMessageReceiver;
-import sia.tacocloud.services.message.receiver.tacoorder.TacoOrderMessageReceiver;
-import sia.tacocloud.services.message.sender.taco.TacoMessageSender;
-import sia.tacocloud.services.message.sender.tacoorder.TacoOrderMessageSender;
+import sia.tacocloud.services.messager.kafka.receiver.KitchenUI;
+import sia.tacocloud.services.messager.rabbitmq.receiver.taco.RabbitMqTacoMessageReceiverService;
+import sia.tacocloud.services.messager.rabbitmq.receiver.tacoorder.RabbitMqTacoOrderMessageReceiverService;
+import sia.tacocloud.services.messager.rabbitmq.sender.taco.RabbitMqTacoMessageSenderService;
+import sia.tacocloud.services.messager.rabbitmq.sender.tacoorder.RabbitMqTacoOrderMessageSenderService;
 import sia.tacocloud.services.taco.TacoService;
 import sia.tacocloud.services.tacoorder.TacoOrderService;
 
@@ -32,17 +33,17 @@ import java.util.List;
 @Controller
 @RequestMapping("/orders")
 @RequiredArgsConstructor
-public class TacoOrderController {
+public class TacoOrderController implements KitchenUI {
 
     private final TacoOrderService tacoOrderService;
     private final OrderProperties orderProperties;
     private final UserDetailsServiceImpl userDetailsService;
     private final HttpSession session;
     private final TacoService tacoService;
-    private final TacoOrderMessageSender tacoOrdermessageSender;
-    private final TacoMessageSender tacoMessageSender;
-    private final TacoOrderMessageReceiver tacoOrderMessageReceiver;
-    private final TacoMessageReceiver tacoMessageReceiver;
+    private final RabbitMqTacoOrderMessageSenderService rabbitMqTacoOrdermessageSenderService;
+    private final RabbitMqTacoMessageSenderService rabbitMqTacoMessageSenderService;
+    private final RabbitMqTacoOrderMessageReceiverService rabbitMqTacoOrderMessageReceiverService;
+    private final RabbitMqTacoMessageReceiverService rabbitMqTacoMessageReceiverService;
     private List<Taco> tacos;
 
 
@@ -68,15 +69,17 @@ public class TacoOrderController {
         tacoOrder.setTacos(tacos);
         tacoOrder.setUser(user);
         TacoOrder order = tacoOrderService.save(tacoOrder);
+        log.debug("TacoOrder: " + order);
+        session.setAttribute("order", order);
 
         tacos.forEach(taco -> taco.setTacoOrder(order));
         tacoService.saveTacoList(tacos);
 
-        tacoOrdermessageSender.sendMessage(order);
-        tacos.forEach(tacoMessageSender::sendMessage);
+        rabbitMqTacoOrdermessageSenderService.sendMessage(order);
+        tacos.forEach(rabbitMqTacoMessageSenderService::sendMessage);
 
-        tacoOrderMessageReceiver.receiveMessage(order);
-        tacos.forEach(tacoMessageReceiver::receiveMessage);
+        rabbitMqTacoOrderMessageReceiverService.receiveMessage(order);
+        tacos.forEach(rabbitMqTacoMessageReceiverService::receiveMessage);
 
         log.debug("tacos from tacoOrder: " + tacoOrder.getTacos());
 
@@ -89,6 +92,17 @@ public class TacoOrderController {
         Pageable pageable = PageRequest.of(0, orderProperties.getPageSize());
         model.addAttribute("orders", tacoOrderService.findByUserOrderByPlacedAtDesc(user, pageable));
         return "orderList";
+    }
+
+    @GetMapping("/{orderId}")
+    @Override
+    public String displayOrder(@PathVariable("orderId") Long orderId, Model model) {
+        log.debug("Order ID: " + orderId);
+        TacoOrder order = tacoOrderService.findById(orderId);
+        model.addAttribute("order", order);
+
+        log.debug("Order: " + session.getAttribute("order"));
+        return "order-details";
     }
 
 }
