@@ -1,0 +1,73 @@
+#draggableContainer.container {
+    /* Ваши существующие стили */
+    background-color: #999999;
+    padding: 20px;
+    width: 60%;
+    margin: 0 auto;
+    border: 2px solid darkgreen;
+    border-radius: 10px;
+    cursor: move;
+    position: relative;
+    z-index: 1;
+}
+
+#draggableContainer.container table {
+    /* Ваши существующие стили */
+    width: 100%;
+    table-layout: fixed;
+}
+
+#draggableContainer.container th,
+#draggableContainer.container td {
+    /* Ваши существующие стили */
+    border: 1px solid darkgreen;
+    padding: 8px;
+}
+
+#draggableContainer.container th:first-child,
+#draggableContainer.container td:first-child {
+    /* Ваши существующие стили */
+    width: 20%;
+}
+
+#draggableContainer.container th:last-child,
+#draggableContainer.container td:last-child {
+    /* Ваши существующие стили */
+    width: 50%;
+}
+/*.container {*/
+/*    background-color: #999999;*/
+/*    padding: 20px;*/
+/*    width: 60%;*/
+/*    margin: 0 auto;*/
+/*    border: 2px solid darkgreen;*/
+/*    border-radius: 10px;*/
+/*    cursor: move;*/
+/*    position: relative; !* Add position: relative *!*/
+/*    z-index: 1; !* Ensure the container is in front during dragging *!*/
+/*}*/
+
+/*.container table {*/
+/*    width: 100%;*/
+/*    table-layout: fixed;*/
+/*}*/
+
+/*.container th,*/
+/*.container td {*/
+/*    border: 1px solid darkgreen;*/
+/*    padding: 8px;*/
+/*}*/
+
+/*.container th:first-child,*/
+/*.container td:first-child {*/
+/*    width: 20%;*/
+/*}*/
+
+/*.container th:last-child,*/
+/*.container td:last-child {*/
+/*    width: 50%;*/
+/*}*/
+
+/*.dragging {*/
+/*    opacity: 0.5; !* Add opacity during dragging for visual effect *!*/
+/*}*/

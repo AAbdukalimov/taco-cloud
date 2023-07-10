@@ -1,4 +1,4 @@
-package sia.tacocloud.services.message.sender.taco;
+package sia.tacocloud.messager.rabbitmq.sender.taco;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -9,7 +9,7 @@ import sia.tacocloud.entities.Taco;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class TacoMessageSenderService implements TacoMessageSender {
+public class RabbitMqTacoMessageSenderServiceServiceImpl implements RabbitMqTacoMessageSenderService {
 
     private final RabbitTemplate rabbit;
 

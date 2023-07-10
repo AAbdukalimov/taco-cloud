@@ -1,0 +1,3 @@
+$(function() {
+    $("#draggableLoginForm").draggable();
+});

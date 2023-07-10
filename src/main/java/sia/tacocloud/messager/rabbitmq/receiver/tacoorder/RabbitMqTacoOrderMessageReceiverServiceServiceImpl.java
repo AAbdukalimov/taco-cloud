@@ -1,4 +1,4 @@
-package sia.tacocloud.services.message.receiver.tacoorder;
+package sia.tacocloud.messager.rabbitmq.receiver.tacoorder;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -7,7 +7,7 @@ import sia.tacocloud.entities.TacoOrder;
 
 @Slf4j
 @Service
-public class TacoOrderMessageReceiverService implements TacoOrderMessageReceiver {
+public class RabbitMqTacoOrderMessageReceiverServiceServiceImpl implements RabbitMqTacoOrderMessageReceiverService {
 
     @RabbitListener(queues = "tacocloud.order.exchange")
     @Override

@@ -1,5 +1,5 @@
 server:
- port: 8080
+ port: 8082
  error:
   path: /error
 
@@ -59,14 +59,21 @@ spring:
           scope:
             - email
             - public_profile
+
   rabbitmq:
     host: localhost
     port: 5672
     username: guest
     password: guest
-    template:
-      exchange: tacocloud.order
-      routing-key: kitchens.central
+#    template:
+#      exchange: tacocloud.order
+#      routing-key: kitchens.central
+  kafka:
+    bootstrap-servers:
+      - localhost:9092
+    consumer:
+      group-id: tacocloud-group-id
+
 
 
 

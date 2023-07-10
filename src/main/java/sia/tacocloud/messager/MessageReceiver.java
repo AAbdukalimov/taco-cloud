@@ -1,4 +1,4 @@
-package sia.tacocloud.services.message.receiver;
+package sia.tacocloud.messager;
 
 
 public interface MessageReceiver <T> {

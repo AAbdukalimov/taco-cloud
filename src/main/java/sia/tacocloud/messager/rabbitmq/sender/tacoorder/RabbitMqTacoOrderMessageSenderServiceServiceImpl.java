@@ -1,4 +1,4 @@
-package sia.tacocloud.services.message.sender.tacoorder;
+package sia.tacocloud.messager.rabbitmq.sender.tacoorder;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -8,11 +8,11 @@ import sia.tacocloud.entities.TacoOrder;
 
 @Slf4j
 @Service
-public class TacoOrderMessageSenderService implements TacoOrderMessageSender {
+public class RabbitMqTacoOrderMessageSenderServiceServiceImpl implements RabbitMqTacoOrderMessageSenderService {
     private final RabbitTemplate rabbit;
 
     @Autowired
-    public TacoOrderMessageSenderService(RabbitTemplate rabbit) {
+    public RabbitMqTacoOrderMessageSenderServiceServiceImpl(RabbitTemplate rabbit) {
         this.rabbit = rabbit;
     }
 

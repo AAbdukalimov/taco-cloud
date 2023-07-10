@@ -1,0 +1,79 @@
+html, body {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background-image: url('../images/TacoCloud.png');
+    background-repeat: repeat;
+    background-position: center;
+}
+
+#draggableLoginForm.container {
+    width: 300px; /* Ширина контейнера */
+    height: 200px; /* Высота контейнера */
+    /*width: 16%;*/
+    margin: 0 auto;
+    cursor: move;
+    position: relative;
+    top: 250px;
+    z-index: 1;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+input {
+    background-color: #999999;
+    width: 100%;
+    height: 30px;
+    border: 2px solid #dddddd;
+    border-radius: 10px;
+
+    /*border-color: green; !* Цвет границы по умолчанию *!*/
+}
+
+input::placeholder {
+    color: #dddddd; /* Здесь укажите желаемый цвет */
+    text-align: center;
+}
+
+input:focus {
+    border-color: blue; /* Цвет границы при фокусировке */
+}
+
+input:invalid {
+    border-color: orange; /* Цвет границы для некорректного ввода */
+}
+
+.header-text {
+    font-family: "JetBrains Mono Medium", sans-serif;
+    font-style: normal;
+    color: #dddddd;
+    -webkit-text-stroke: 1px #333333; /* Цвет обводки и толщина (для браузеров на базе WebKit, таких как Chrome и Safari) */
+}
+
+.button {
+    width: 70px;
+    height: 30px;
+    display: inline-block;
+    padding: 5px 5px; /* Отступы кнопки (верх/низ, лево/право) */
+    background-color: #999999;
+    color: #dddddd;
+    cursor: pointer;
+    border: 2px solid #dddddd;
+    border-radius: 10px;
+}
+.button-register {
+    width: 80px;
+    height: 30px;
+    display: inline-block;
+    padding: 5px 5px; /* Отступы кнопки (верх/низ, лево/право) */
+    background-color: #999999;
+    color: #dddddd;
+    cursor: pointer;
+    border: 2px solid #dddddd;
+    border-radius: 10px;
+}
+
+
