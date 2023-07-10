@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import sia.tacocloud.entities.TacoOrder;
-import sia.tacocloud.services.messager.rabbitmq.sender.tacoorder.RabbitMqTacoOrderMessageSenderService;
+import sia.tacocloud.messager.rabbitmq.sender.tacoorder.RabbitMqTacoOrderMessageSenderService;
 import sia.tacocloud.services.tacoorder.TacoOrderService;
 
 import java.util.List;
